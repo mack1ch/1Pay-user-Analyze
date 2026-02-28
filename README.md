@@ -1,4 +1,28 @@
-# React + TypeScript + Vite
+# 1pay_risk — сбор данных о пользователе (браузер, отпечаток, бот-детекция)
+
+React + TypeScript + Vite + Tailwind + Ant Design. Сбор метрик без запроса разрешений, экспорт в CSV.
+
+## Запуск через Docker
+
+```bash
+# Сборка и запуск (порт 3000)
+docker compose up --build
+
+# Или только сборка образа и запуск контейнера
+docker build -t 1pay_risk .
+docker run -p 3000:80 1pay_risk
+```
+
+Приложение будет доступно по адресу: http://localhost:3000
+
+## Локальная разработка
+
+```bash
+npm install
+npm run dev
+```
+
+---
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
