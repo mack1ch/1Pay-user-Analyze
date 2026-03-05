@@ -1,3 +1,4 @@
+import { md5 } from 'js-md5';
 import type { UserDataItem } from '../types';
 
 function item(category: string, key: string, label: string, value: string | number | boolean): UserDataItem {
@@ -51,25 +52,29 @@ function getWebGLInfo(): { vendor: string; renderer: string; extensions: string[
   }
 }
 
+/**
+ * Canvas fingerprint по методу BrowserLeaks (https://browserleaks.com/canvas).
+ * Та же отрисовка и MD5 от toDataURL('image/png') для совместимости и лучшей различимости.
+ */
 function getCanvasFingerprint(): string {
   try {
     const c = document.createElement('canvas');
-    c.width = 200;
-    c.height = 50;
+    c.width = 220;
+    c.height = 30;
     const ctx = c.getContext('2d');
     if (!ctx) return '—';
+    const txt = 'BrowserLeaks,com <canvas> 1.0';
     ctx.textBaseline = 'top';
-    ctx.font = '14px Arial';
+    ctx.font = "14px 'Arial'";
+    ctx.textBaseline = 'alphabetic';
     ctx.fillStyle = '#f60';
-    ctx.fillRect(0, 0, 100, 50);
+    ctx.fillRect(125, 1, 62, 20);
     ctx.fillStyle = '#069';
-    ctx.fillText('Canvas fingerprint', 2, 15);
-    let hash = 0;
-    const data = ctx.getImageData(0, 0, 200, 50).data;
-    for (let i = 0; i < data.length; i += 4) {
-      hash = ((hash << 5) - hash + data[i]! + data[i + 1]! + data[i + 2]!) | 0;
-    }
-    return (hash >>> 0).toString(16);
+    ctx.fillText(txt, 2, 15);
+    ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+    ctx.fillText(txt, 4, 17);
+    const dataUrl = c.toDataURL('image/png');
+    return md5(dataUrl).toUpperCase();
   } catch {
     return '—';
   }
